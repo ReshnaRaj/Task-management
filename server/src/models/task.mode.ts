@@ -5,13 +5,13 @@ export interface ITask extends Document {
   priority: "low" | "medium" | "high";
   status: "open" | "in-progress" | "completed";
   dueDate: Date;
-  assignedTo: mongoose.Types.ObjectId;
-  createdBy: mongoose.Types.ObjectId;
+  assignedTo:Types.ObjectId;
+  createdBy: Types.ObjectId;
   attachments: string[];
   comments: IComment[];
 }
-export interface IComment extends Document {
-  user: mongoose.Types.ObjectId;
+export interface IComment {
+  user: Types.ObjectId;
   text: string;
   createdAt: Date;
 }
@@ -31,7 +31,7 @@ const taskSchema = new Schema<ITask>({
   },
   status: {
     type: String,
-    enum: ["completed", "open", "in-progres"],
+    enum: ["completed", "open", "in-progress"],
   },
   dueDate: {
     type: Date,
