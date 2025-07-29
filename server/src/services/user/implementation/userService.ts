@@ -1,6 +1,6 @@
 import { LoginDTO } from "../../../dto/login.dto";
 import { IUser } from "../../../models/user.model";
-import { IBaseRepository } from "../../../repositories/user/interface/IBaseRepository";
+import { IBaseRepository } from "../../../repositories/Base/interface/IBaseRepository";
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../../../utils/jwt";
 import { comparePassword, hashPassword } from "../../../utils/check.Password";
 import { IUserService } from "../interface/IUserService";
