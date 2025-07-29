@@ -23,7 +23,7 @@ export const Messages = {
 };
 
 export const VALIDATION = {
-    NAME_MIN: 'Name must be at least 2 characters long',
+    NAME_MIN: 'Name must be at least 5 characters long',
     NAME_MAX: 'Name cannot exceed 50 characters',
     EMAIL_INVALID: 'Invalid email address',
     PASSWORD_MIN: 'Password must be at least 8 characters long',

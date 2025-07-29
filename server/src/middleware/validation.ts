@@ -1,31 +1,34 @@
 import { z } from "zod";
 import { Request, Response, NextFunction } from "express";
+import { HttpStatus } from "../constants/status.constants";
+import { VALIDATION } from "../constants/message.constants";
 
 export const registerUserSchema = z
   .object({
     Name: z
       .string()
-      .min(5, "Name must be at least 2 characters")
-      .max(50, "Name is too long"),
+      .min(5, { message: VALIDATION.NAME_MIN })
+      .max(50, { message: VALIDATION.NAME_MAX }),
 
-    email: z.string().email("Invalid email format").toLowerCase().trim(),
+    email: z
+      .string()
+      .email({ message: VALIDATION.EMAIL_INVALID })
+      .toLowerCase()
+      .trim(),
 
     role: z.enum(["user", "admin"]).optional(),
 
     password: z
       .string()
-      .min(8, "Password must be at least 8 characters")
-      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-      .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-      .regex(/[0-9]/, "Password must contain at least one digit")
-      .regex(
-        /[^A-Za-z0-9]/,
-        "Password must contain at least one special character"
-      ),
+      .min(8, { message: VALIDATION.PASSWORD_MIN })
+      .regex(/[A-Z]/, { message: VALIDATION.PASSWORD_UPPERCASE })
+      .regex(/[a-z]/, { message: VALIDATION.PASSWORD_LOWERCASE })
+      .regex(/[0-9]/, { message: VALIDATION.PASSWORD_NUMBER })
+      .regex(/[^A-Za-z0-9]/, { message: VALIDATION.PASSWORD_SPECIAL }),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Password do not match",
+    message: VALIDATION.CONFIRM_PASSWORD_MISMATCH,
     path: ["confirmPassword"],
   });
 export const validateRegister = (
@@ -39,7 +42,7 @@ export const validateRegister = (
   } catch (error) {
     if (error instanceof z.ZodError) {
       const formatted = error.flatten();
-      res.status(400).json({
+      res.status(HttpStatus.BAD_REQUEST).json({
         message: "Validation failed",
         errors: formatted.fieldErrors,
       });

@@ -1,8 +1,8 @@
 import { Model, Document, FilterQuery, QueryOptions } from "mongoose";
-import { IUserRepository } from "../interface/IUserRepository";
+import { IBaseRepository } from "../interface/IBaseRepository";
 
 
-export class UserRepository<T extends Document> implements IUserRepository<T> {
+export class UserRepository<T extends Document> implements IBaseRepository<T> {
     protected model: Model<T>;
 
     constructor(model: Model<T>) {

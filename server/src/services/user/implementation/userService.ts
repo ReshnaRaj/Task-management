@@ -1,21 +1,24 @@
 import { LoginDTO } from "../../../dto/login.dto";
 import { IUser } from "../../../models/user.model";
-import { IUserRepository } from "../../../repositories/user/interface/IUserRepository";
+import { IBaseRepository } from "../../../repositories/user/interface/IBaseRepository";
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../../../utils/jwt";
-import { comparePassword, hashPassword } from "../../../utils/checkPassword";
+import { comparePassword, hashPassword } from "../../../utils/check.Password";
 import { IUserService } from "../interface/IUserService";
+import { createHttpError } from "../../../utils/http.errors";
+import { HttpStatus } from "../../../constants/status.constants";
+import { Messages } from "../../../constants/message.constants";
 
 export class UserService implements IUserService{
-    constructor(private _userRepository:IUserRepository<IUser>){}
+    constructor(private _userRepository:IBaseRepository<IUser>){}
 
     async register(name: string, email: string, password: string): Promise<{ message: string }> {
             const existingUser = await this._userRepository.findOne({ email });
             if(existingUser){
-                console.log("user exist")
+               throw createHttpError(HttpStatus.CONFLICT,Messages.USER_EXIST)
             }
               const hashedPassword = await hashPassword(password);
               await this._userRepository.create({name,email,password:hashedPassword})
-               return {message: "signup Success"}
+               return {message: Messages.SIGNUP_SUCCESS}
 
 
     }
@@ -23,17 +26,17 @@ export class UserService implements IUserService{
          const user = await this._userRepository.findOne({ email });
          console.log(user,"checks userss")
           if (!user) {
-           console.log("no user exist")
+          throw createHttpError(HttpStatus.BAD_REQUEST,Messages.USER_NOT_FOUND)
         }
           const validPassword = await comparePassword(password, user?user.password:"null");
 
         if (!validPassword) {
-            console.log("Invalid credentials")
+           throw createHttpError(HttpStatus.BAD_REQUEST,Messages.INVALID_CREDENTIALS)
         }
         const accessToken=generateAccessToken(user?.id.toString())
           const refreshToken = generateRefreshToken(user?.id.toString());
            return {
-            message: "Login Success",
+            message: Messages.LOGIN_SUCCESS,
             accessToken,
             refreshToken,
             user: {
@@ -47,7 +50,7 @@ export class UserService implements IUserService{
         const decoded = verifyRefreshToken(token);
 
         if (!decoded){
-           console.log("invalid token")
+            throw createHttpError(HttpStatus.UNAUTHORIZED, Messages.INVALID_TOKEN)
         }
 
         const accessToken = generateAccessToken(decoded?decoded.id:"null")
