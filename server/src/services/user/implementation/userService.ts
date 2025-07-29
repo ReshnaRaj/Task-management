@@ -2,7 +2,7 @@ import { LoginDTO } from "../../../dto/login.dto";
 import { IUser } from "../../../models/user.model";
 import { IUserRepository } from "../../../repositories/user/interface/IUserRepository";
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../../../utils/jwt";
-import { comparePassword, hashPassword } from "../../../utils/Password";
+import { comparePassword, hashPassword } from "../../../utils/checkPassword";
 import { IUserService } from "../interface/IUserService";
 
 export class UserService implements IUserService{

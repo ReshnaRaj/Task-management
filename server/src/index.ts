@@ -1,11 +1,14 @@
 import express from "express"
 import dotenv from "dotenv"
 import cors from "cors"
+import validateEnv from './utils/env';
+import { env } from "./config/env.config";
 import dbConnection from "./config/dbConnection"
- 
-dotenv.config()
+dbConnection()
+validateEnv();
 const app=express()
-const PORT=process.env.PORT
+const PORT=env.PORT;
+ 
 
 app.use(express.json());
 // app.use('/api/auth',authR);
@@ -17,7 +20,8 @@ app.use(cors({
  
  
 
-dbConnection()
+
+
 app.listen(PORT, () => {
     console.log(`Server running in port ${PORT}`);
 });
