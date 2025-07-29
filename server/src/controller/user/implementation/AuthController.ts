@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { IUserAuthController } from "../interface/IUserAuthController";
 import { IUserService } from "../../../services/user/interface/IUserService";
+import { HttpStatus } from "../../../constants/status.constants";
 export class UserAuthController implements IUserAuthController {
   constructor(private _userService: IUserService) {}
   async register(
@@ -11,7 +12,7 @@ export class UserAuthController implements IUserAuthController {
     try {
       const { name, email, password } = req.body;
       const response = await this._userService.register(name, email, password);
-      res.status(200).json({ message: response.message });
+      res.status(HttpStatus.OK).json({ message: response.message });
     } catch (error) {
       next(error);
     }
@@ -26,7 +27,7 @@ export class UserAuthController implements IUserAuthController {
         sameSite: "none",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
-      res.status(200).json({
+      res.status(HttpStatus.OK).json({
         message: response.message,
         user: response.user,
         accessToken: response.accessToken,
