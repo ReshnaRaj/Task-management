@@ -56,7 +56,7 @@ const Login = () => {
                       Forgot password?
                     </a>
                   </div>
-                  <button className="bg-black text-white p-3 rounded hover:bg-gray-800 transition">
+                  <button className="bg-black text-white p-3 rounded hover:bg-black transition cursor-pointer">
                     Login
                   </button>
                 </form>

@@ -1,9 +1,40 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import login from "@/assets/login.png";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import { LockKeyhole } from "lucide-react";
 import { LockKeyholeOpen } from "lucide-react";
+import React, { useState } from "react";
 const Signup = () => {
+ 
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .min(3, "Name must be at least 3 characters")
+      .required("Name is required"),
+
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
+
+    password: Yup.string()
+      .min(6, "Password must be at least 6 characters")
+      .required("Password is required"),
+
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password")], "Passwords must match")
+      .required("Please confirm your password"),
+  });
+
+  const handleSubmit = (values: {
+    name: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }) => {
+    try {
+    } catch (error) {}
+  };
   return (
     <>
       <div className="h-screen flex flex-col overflow-hidden">
@@ -31,48 +62,91 @@ const Signup = () => {
                 <h2 className="flex   justify-center text-3xl font-bold mb-9">
                   Sign Up
                 </h2>
-                <form className="flex flex-col gap-4">
-                  <input
-                    type="name"
-                    placeholder="Enter Name"
-                    className="border p-3 rounded outline-none w-full"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Enter Email"
-                    className="border p-3 rounded outline-none w-full"
-                  />
+                <Formik
+                  initialValues={{
+                    name: "",
+                    email: "",
+                    password: "",
+                    confirmPassword: "",
+                  }}
+                  validationSchema={validationSchema}
+                  onSubmit={handleSubmit}
+                >
+                  {({ values, handleChange, handleSubmit }) => (
+                    <form
+                      onSubmit={handleSubmit}
+                      className="flex flex-col gap-4"
+                    >
+                      <input
+                        type="text"
+                        name="name"
+                        placeholder="Enter Name"
+                        onChange={handleChange}
+                        value={values.name}
+                        className="border p-3 rounded outline-none w-full"
+                      />
+                      <ErrorMessage
+                        name="name"
+                        component="div"
+                        className="text-red-500 text-sm"
+                      />
+                      <input
+                        type="email"
+                        name="email"
+                        value={values.email}
+                        placeholder="Enter Email"
+                        onChange={handleChange}
+                        className="border p-3 rounded outline-none w-full"
+                      />
+                      <ErrorMessage
+                        name="email"
+                        component="div"
+                        className="text-red-500 text-sm"
+                      />
 
-                  <div className="relative">
-                    <input
-                      type="password"
-                      placeholder="Enter Password"
-                      className="border p-3 rounded outline-none w-full"
-                    />
-                    <span className="absolute  right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer">
-                      <LockKeyhole className="w-5 h-5" />
-                    </span>
-                  </div>
-                   <div className="relative">
-                    <input
-                      type="password"
-                      placeholder="Enter Password again"
-                      className="border p-3 rounded outline-none w-full"
-                    />
-                    <span className="absolute  right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer">
-                      <LockKeyhole className="w-5 h-5" />
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span>Having trouble signing in?</span>
-                    <a href="#" className="text-blue-600 hover:underline">
-                      Forgot password?
-                    </a>
-                  </div>
-                  <button className="bg-black text-white p-3 rounded hover:bg-gray-800 transition">
-                    Sign Up
-                  </button>
-                </form>
+                      <div className="relative">
+                        <input
+                          type="password"
+                          name="password"
+                          placeholder="Enter Password"
+                          onChange={handleChange}
+                          value={values.password}
+                          className="border p-3 rounded outline-none w-full"
+                        />
+                        <span className="absolute  right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer">
+                          <LockKeyhole className="w-5 h-5" />
+                        </span>
+                      </div>
+                      <ErrorMessage
+                        name="password"
+                        component="div"
+                        className="text-red-500 text-sm"
+                      />
+                      <div className="relative">
+                        <input
+                          type="password"
+                          name="confirmPassword"
+                          onChange={handleChange}
+                          value={values.confirmPassword}
+                          placeholder="Enter Password again"
+                          className="border p-3 rounded outline-none w-full"
+                        />
+                        <span className="absolute  right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer">
+                          <LockKeyhole className="w-5 h-5" />
+                        </span>
+                      </div>
+                      <ErrorMessage
+                        name="confirmPassword"
+                        component="div"
+                        className="text-red-500 text-sm"
+                      />
+
+                      <button   type="submit" className="bg-black text-white p-3 rounded hover:bg-black transition cursor-pointer">
+                        Sign Up
+                      </button>
+                    </form>
+                  )}
+                </Formik>
                 <div className="flex items-center gap-2 my-6">
                   <hr className="flex-1 border-gray-300" />
                   <span className="text-sm text-gray-500">OR</span>
