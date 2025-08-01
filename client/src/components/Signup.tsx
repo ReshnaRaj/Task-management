@@ -7,7 +7,16 @@ import { LockKeyhole } from "lucide-react";
 import { LockKeyholeOpen } from "lucide-react";
 import React, { useState } from "react";
 const Signup = () => {
- 
+ const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState(false);
+ const togglePassword = () => {
+  setShowPassword((prev) => !prev);
+  
+};
+ const toggleConfirmPassword = () => {
+    setConfirmPassword((prev) => !prev);
+  };
+
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(3, "Name must be at least 3 characters")
@@ -106,15 +115,15 @@ const Signup = () => {
 
                       <div className="relative">
                         <input
-                          type="password"
+                          type={showPassword?"text":"password"}
                           name="password"
                           placeholder="Enter Password"
                           onChange={handleChange}
                           value={values.password}
                           className="border p-3 rounded outline-none w-full"
                         />
-                        <span className="absolute  right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer">
-                          <LockKeyhole className="w-5 h-5" />
+                        <span onClick={togglePassword} className="absolute  right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer">
+                         {!showPassword?(<LockKeyhole className="w-5 h-5" />):<LockKeyholeOpen className="w-5 h-5" />}
                         </span>
                       </div>
                       <ErrorMessage
@@ -124,15 +133,15 @@ const Signup = () => {
                       />
                       <div className="relative">
                         <input
-                          type="password"
+                          type={confirmPassword?"text":"password"}
                           name="confirmPassword"
                           onChange={handleChange}
                           value={values.confirmPassword}
                           placeholder="Enter Password again"
                           className="border p-3 rounded outline-none w-full"
                         />
-                        <span className="absolute  right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer">
-                          <LockKeyhole className="w-5 h-5" />
+                        <span  onClick={toggleConfirmPassword} className="absolute  right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer">
+                           {!confirmPassword?(<LockKeyhole className="w-5 h-5" />):<LockKeyholeOpen className="w-5 h-5" />}
                         </span>
                       </div>
                       <ErrorMessage
