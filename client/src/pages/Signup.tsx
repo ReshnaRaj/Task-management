@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import login from "@/assets/login.png";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -9,6 +9,7 @@ import { LockKeyholeOpen } from "lucide-react";
 import React, { useState } from "react";
 import {signupUser} from "../../api/auth"
 const Signup = () => {
+   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(false);
   const togglePassword = () => {
@@ -48,11 +49,17 @@ const Signup = () => {
   }) => {
     try {
       const res = await signupUser(values)
-      
-
-      toast.success("Registration successful!");
      
-    } catch (error) {}
+       if (res?.status === 200) {
+      toast.success("Registration successful!");
+     setTimeout(()=>{
+      navigate('/login')
+     },1000)
+    }
+     
+    } catch (error:any) {
+       toast.error(error.response.data.error || "Signup failed");
+    }
   };
   return (
     <>

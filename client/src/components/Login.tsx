@@ -3,8 +3,36 @@ import { motion } from "framer-motion";
 import login from "@/assets/login.png";
 import { LockKeyhole } from "lucide-react";
 import { LockKeyholeOpen } from "lucide-react";
+import { useState } from "react";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import { toast } from "sonner";
+import { googleLogin } from "../../api/auth";
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+  interface GooglePayload {
+    email: string;
+    name: string;
+    picture: string;
+    sub: string;
+  }
+
+  const handleGoogleLogin = async (credentialResponse: any) => {
+    try {
+      const token = credentialResponse.credential;
+      const decoded: GooglePayload = jwtDecode(token);
+      const res=await googleLogin(decoded)
+      console.log(res,"response from backend")
+
+    } catch (error) {}
+  };
+  const errorMessage = () => {
+    toast.error("Google Login failed")
+  };
   return (
     <>
       <div className="h-screen flex flex-col overflow-hidden">
@@ -40,16 +68,22 @@ const Login = () => {
                   />
                   <div className="relative">
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="Enter Password"
                       className="border p-3 rounded outline-none w-full"
                     />
-                    <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer">
-                      <LockKeyhole className="w-5 h-5" />
+                    <span
+                      onClick={togglePassword}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+                    >
+                      {showPassword ? (
+                        <LockKeyholeOpen className="w-5 h-5" />
+                      ) : (
+                        <LockKeyhole className="w-5 h-5" />
+                      )}
                     </span>
                   </div>
 
-                  
                   <div className="flex justify-between text-sm">
                     <span>Having trouble signing in?</span>
                     <a href="#" className="text-blue-600 hover:underline">
@@ -65,14 +99,13 @@ const Login = () => {
                   <span className="text-sm text-gray-500">OR</span>
                   <hr className="flex-1 border-gray-300" />
                 </div>
-                <button className="flex items-center justify-center border p-3 rounded w-full hover:bg-gray-100 transition cursor-pointer">
-                  <img
-                    src="https://www.svgrepo.com/show/475656/google-color.svg"
-                    alt="Google"
-                    className="w-5 h-5 mr-2"
+                <div className="flex items-center justify-center w-full">
+                  <GoogleLogin
+                    onSuccess={handleGoogleLogin}
+                    onError={errorMessage}
                   />
-                  Continue with Google
-                </button>
+                </div>
+
                 <p className="mt-6 text-sm text-center">
                   Don’t have an account?{" "}
                   <Link

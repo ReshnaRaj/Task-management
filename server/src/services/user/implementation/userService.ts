@@ -13,6 +13,7 @@ export class UserService implements IUserService{
 
     async register(name: string, email: string, password: string): Promise<{ message: string }> {
             const existingUser = await this._userRepository.findOne({ email });
+            console.log(existingUser,"'existing User")
             if(existingUser){
                throw createHttpError(HttpStatus.CONFLICT,Messages.USER_EXIST)
             }
