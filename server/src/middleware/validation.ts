@@ -5,7 +5,7 @@ import { VALIDATION } from "../constants/message.constants";
 
 export const registerUserSchema = z
   .object({
-    Name: z
+    name: z
       .string()
       .min(5, { message: VALIDATION.NAME_MIN })
       .max(50, { message: VALIDATION.NAME_MAX }),
