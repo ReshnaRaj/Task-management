@@ -17,6 +17,15 @@ export class UserAuthController implements IUserAuthController {
       next(error);
     }
   }
+  async googleLogin(req:Request,res:Response,next:NextFunction):Promise<void>{
+    try {
+       const { name, email} = req.body;
+          const response = await this._userService.googleLogin(name, email);
+          res.status(HttpStatus.OK).json({message:response.message})
+    } catch (error) {
+      next(error);
+    }
+  }
   async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { email, password } = req.body;

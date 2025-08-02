@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import login from "@/assets/login.png";
 import { LockKeyhole } from "lucide-react";
@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { googleLogin } from "../../api/auth";
 
 const Login = () => {
+  const navigate=useNavigate()
   const [showPassword, setShowPassword] = useState(false);
   const togglePassword = () => {
     setShowPassword((prev) => !prev);
@@ -26,7 +27,10 @@ const Login = () => {
       const token = credentialResponse.credential;
       const decoded: GooglePayload = jwtDecode(token);
       const res=await googleLogin(decoded)
-      console.log(res,"response from backend")
+      
+    if(res?.status==200){
+      navigate("/home")
+    }
 
     } catch (error) {}
   };
