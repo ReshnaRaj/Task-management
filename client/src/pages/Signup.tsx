@@ -1,12 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import login from "@/assets/login.png";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { toast } from "sonner";
 import { LockKeyhole } from "lucide-react";
 import { LockKeyholeOpen } from "lucide-react";
-import React, { useState } from "react";
+import  { useState } from "react";
 import {signupUser} from "../../api/auth"
 const Signup = () => {
    const navigate = useNavigate();
