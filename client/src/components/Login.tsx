@@ -8,9 +8,11 @@ import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
 import { googleLogin, loginUser } from "../../api/auth";
-
+import { useDispatch } from "react-redux";
+import { setCredentials } from "@/redux/slice/authSlice";
 const Login = () => {
   const navigate = useNavigate();
+   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [values, setValues] = useState({
     email: "",
@@ -38,8 +40,10 @@ const Login = () => {
 
     try {
       const res = await loginUser(values);
+      
       toast.success(res.data.message);
       if (res?.status === 200) {
+        dispatch(setCredentials({ user: res.data.user, token: res.data.accessToken }));
         setTimeout(() => {
           navigate("/home");
         }, 1000);
