@@ -31,3 +31,15 @@ export const googleLogin=async (decodedData: {
     
   }
 }
+
+export const loginUser=async(userData:{
+  email:string,
+  password:string
+})=>{
+  try {
+    const response=await publicAxios.post("/auth/login",userData)
+    return response
+  } catch (error) {
+    throw error
+  }
+}

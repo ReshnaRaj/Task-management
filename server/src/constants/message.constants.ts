@@ -15,7 +15,7 @@ export const Messages = {
     LOGIN_SUCCESS: "Login successful",
     SIGNUP_SUCCESS: "Signup successful",
     USER_NOT_FOUND: "User not found",
-    INVALID_CREDENTIALS: "Invalid email or password",
+    INVALID_CREDENTIALS: "Incorrect password",
     ALL_FEILDs_REQUIRED: "All feilds are required",
     DAILY_LIMIT_REACHED: "You have reached your daily URL limit.",
     URL_EXPIRED: "expired or not found",

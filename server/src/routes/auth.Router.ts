@@ -10,4 +10,5 @@ const userService=new UserService(userRepository)
 const userController=new UserAuthController(userService)
 router.post("/register",validateRegister,userController.register.bind(userController))
 router.post("/google-login",userController.googleLogin.bind(userController))
+router.post("/login",userController.login.bind(userController))
 export default router

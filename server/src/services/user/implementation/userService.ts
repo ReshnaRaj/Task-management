@@ -21,7 +21,7 @@ export class UserService implements IUserService {
     password: string
   ): Promise<{ message: string }> {
     const existingUser = await this._userRepository.findOne({ email });
-    console.log(existingUser, "'existing User");
+     
     if (existingUser) {
       throw createHttpError(HttpStatus.CONFLICT, Messages.USER_EXIST);
     }
@@ -75,6 +75,7 @@ export class UserService implements IUserService {
   async login(email: string, password: string): Promise<LoginDTO> {
     const user = await this._userRepository.findOne({ email });
     console.log(user, "checks userss");
+    console.log("login service implementation")
     if (!user) {
       throw createHttpError(HttpStatus.BAD_REQUEST, Messages.USER_NOT_FOUND);
     }

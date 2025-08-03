@@ -1,4 +1,4 @@
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import login from "@/assets/login.png";
 import { LockKeyhole } from "lucide-react";
@@ -7,11 +7,18 @@ import { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
-import { googleLogin } from "../../api/auth";
+import { googleLogin, loginUser } from "../../api/auth";
 
 const Login = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [values, setValues] = useState({
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {}
+  );
   const togglePassword = () => {
     setShowPassword((prev) => !prev);
   };
@@ -21,21 +28,49 @@ const Login = () => {
     picture: string;
     sub: string;
   }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!values.email.includes("@")) {
+      setErrors((prev) => ({ ...prev, email: "Email must contain @" }));
+      return;
+    }
+
+    try {
+      const res = await loginUser(values);
+      toast.success(res.data.message);
+      if (res?.status === 200) {
+        setTimeout(() => {
+          navigate("/home");
+        }, 1000);
+      }
+    } catch (error: any) {
+      const errorMsg = error.response.data.error;
+      // toast.error("Login failed");
+      if (errorMsg === "User not found") {
+        setErrors((prev) => ({ ...prev, email: errorMsg }));
+      } else if (errorMsg === "Incorrect password") {
+        setErrors((prev) => ({ ...prev, password: errorMsg }));
+      }
+    }
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setErrors({});
+  };
 
   const handleGoogleLogin = async (credentialResponse: any) => {
     try {
       const token = credentialResponse.credential;
       const decoded: GooglePayload = jwtDecode(token);
-      const res=await googleLogin(decoded)
-      
-    if(res?.status==200){
-      navigate("/home")
-    }
-
+      const res = await googleLogin(decoded);
+      if (res?.status == 200) {
+        navigate("/home");
+      }
     } catch (error) {}
   };
   const errorMessage = () => {
-    toast.error("Google Login failed")
+    toast.error("Google Login failed");
   };
   return (
     <>
@@ -64,16 +99,25 @@ const Login = () => {
                 <h2 className="flex   justify-center text-3xl font-bold mb-9">
                   Login
                 </h2>
-                <form className="flex flex-col gap-4">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                   <input
                     type="email"
+                    name="email"
                     placeholder="Enter Email"
+                    value={values.email}
+                    onChange={handleChange}
                     className="border p-3 rounded outline-none w-full"
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm">{errors.email}</p>
+                  )}
                   <div className="relative">
                     <input
+                      name="password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter Password"
+                      value={values.password}
+                      onChange={handleChange}
                       className="border p-3 rounded outline-none w-full"
                     />
                     <span
@@ -86,6 +130,9 @@ const Login = () => {
                         <LockKeyhole className="w-5 h-5" />
                       )}
                     </span>
+                    {errors.password && (
+                      <p className="text-red-500 text-sm">{errors.password}</p>
+                    )}
                   </div>
 
                   <div className="flex justify-between text-sm">
@@ -94,7 +141,10 @@ const Login = () => {
                       Forgot password?
                     </a>
                   </div>
-                  <button className="bg-black text-white p-3 rounded hover:bg-black transition cursor-pointer">
+                  <button
+                    type="submit"
+                    className="bg-black text-white p-3 rounded hover:bg-black transition cursor-pointer"
+                  >
                     Login
                   </button>
                 </form>
