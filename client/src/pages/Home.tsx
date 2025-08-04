@@ -1,19 +1,36 @@
 import React from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
+import TaskCard from "@/components/TaskCard";
+import ProgressChart from "@/components/ProgressChart";
 
 const Home = () => {
+   const dailyTasks = [
+    { id: 1, label: "Create a new post", checked: false },
+    { id: 2, label: "Design an Instagram carousel", checked: true },
+    { id: 3, label: "Create a new post", checked: false },
+  ];
+
+  const weeklyTasks = [
+    { id: 1, label: "Create a new post", checked: false },
+    { id: 2, label: "Design an Instagram carousel", checked: true },
+    { id: 3, label: "Create a new post", checked: false },
+  ];
   return (
-    <div className="flex h-screen">
+     <div className="flex">
       <Sidebar />
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 bg-gray-50 h-screen overflow-auto">
         <Header />
-        <main className="p-6 bg-gradient-to-br from-purple-50 to-white h-full">
-          <h2 className="text-lg font-medium mb-4">Create a Task</h2>
-          {/* Task creation form will go here */}
+        <main className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+            <TaskCard title="Daily Task" tasks={dailyTasks} />
+            <TaskCard title="Weekly Task" tasks={weeklyTasks} />
+            <ProgressChart />
+          </div>
         </main>
       </div>
     </div>
+
   );
 };
 
