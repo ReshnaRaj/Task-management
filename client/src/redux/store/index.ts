@@ -7,7 +7,7 @@ import authReducer from "../slice/authSlice";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth"], // persist only the auth slice
+  whitelist: ["auth"],
 };
 
 const rootReducer = combineReducers({
@@ -26,6 +26,6 @@ export const store = configureStore({
 
 export const persistor = persistStore(store);
 
-// Types for use in components
+ 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

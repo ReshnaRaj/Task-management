@@ -45,7 +45,7 @@ const Login = () => {
       if (res?.status === 200) {
         dispatch(setCredentials({ user: res.data.user, token: res.data.accessToken }));
         setTimeout(() => {
-          navigate("/home");
+          navigate("/dashboard");
         }, 1000);
       }
     } catch (error: any) {
