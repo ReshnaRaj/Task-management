@@ -68,7 +68,9 @@ const Login = () => {
       const token = credentialResponse.credential;
       const decoded: GooglePayload = jwtDecode(token);
       const res = await googleLogin(decoded);
+      
       if (res?.status == 200) {
+          dispatch(setCredentials({ user: res.data.user, token: res.data.token }));
         navigate("/dashboard");
       }
     } catch (error) {}
