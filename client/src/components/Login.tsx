@@ -69,7 +69,7 @@ const Login = () => {
       const decoded: GooglePayload = jwtDecode(token);
       const res = await googleLogin(decoded);
       if (res?.status == 200) {
-        navigate("/home");
+        navigate("/dashboard");
       }
     } catch (error) {}
   };

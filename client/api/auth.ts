@@ -13,33 +13,38 @@ export const signupUser = async (formData: {
     throw error || { message: "Signup failed" };
   }
 };
-export const googleLogin=async (decodedData: {
+export const googleLogin = async (decodedData: {
   email: string;
-  name: string
-   sub: string;
+  name: string;
+  sub: string;
   picture: string;
-})=>{
+}) => {
   try {
-     const res = await publicAxios.post("/auth/google-login", {
-      email: decodedData.email,
-      name: decodedData.name,
-      // googleId: decodedData.sub, // sub = unique google user id
-      // picture: decodedData.picture,
-    });
-    return res
-  } catch (error) {
+    const res = await publicAxios.post(
+      "/auth/google-login",
+      {
+        email: decodedData.email,
+        name: decodedData.name,
+        // googleId: decodedData.sub, // sub = unique google user id
+        // picture: decodedData.picture,
+      },
+      { withCredentials: true }
+    );
     
-  }
-}
+    return res;
+  } catch (error) {}
+};
 
-export const loginUser=async(userData:{
-  email:string,
-  password:string
-})=>{
+export const loginUser = async (userData: {
+  email: string;
+  password: string;
+}) => {
   try {
-    const response=await publicAxios.post("/auth/login",userData)
-    return response
+    const response = await publicAxios.post("/auth/login", userData, {
+      withCredentials: true,
+    });
+    return response;
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};

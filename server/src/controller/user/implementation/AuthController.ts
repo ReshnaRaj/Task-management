@@ -17,11 +17,28 @@ export class UserAuthController implements IUserAuthController {
       next(error);
     }
   }
-  async googleLogin(req:Request,res:Response,next:NextFunction):Promise<void>{
+  async googleLogin(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
-       const { name, email} = req.body;
-          const response = await this._userService.googleLogin(name, email);
-          res.status(HttpStatus.OK).json({message:response.message})
+      const { name, email } = req.body;
+      const response = await this._userService.googleLogin(name, email);
+ 
+      res.cookie("refreshToken", response.refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+      res
+        .status(HttpStatus.OK)
+        .json({
+          message: response.message,
+          user: response.user,
+          token: response.accessToken,
+        });
     } catch (error) {
       next(error);
     }
