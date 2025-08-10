@@ -9,7 +9,7 @@ const data = [
 
 const ProgressChart = () => {
   return (
-    <div className="bg-white p-4 rounded-xl shadow w-full">
+    <div className="bg-white p-4 dark:bg-black rounded-xl shadow w-full">
       <h3 className="font-semibold text-md mb-2">Yearly Progress</h3>
       <div className="flex flex-col items-center">
         <PieChart width={160} height={160}>

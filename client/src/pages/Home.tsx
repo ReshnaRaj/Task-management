@@ -19,7 +19,7 @@ const Home = () => {
   return (
      <div className="flex">
       <Sidebar />
-      <div className="flex-1 bg-gray-50 h-screen overflow-auto">
+      <div className="flex-1 bg-gray-50 dark:bg-black h-screen overflow-auto pt-[64px] lg:pt-0">
         <Header />
         <main className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
