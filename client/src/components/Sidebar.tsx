@@ -11,12 +11,24 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useDispatch } from "react-redux";
+import { logout } from "@/redux/slice/authSlice";
+import { useNavigate } from "react-router-dom";
+
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
+   const dispatch = useDispatch();
+   const navigate=useNavigate()
+
+  const handleLogout = () => {
+    dispatch(logout());
+     
+    navigate("/");
+  };
   return (
     <>
-      <div className="lg:hidden fixed top-0 left-0 w-full z-50 p-4 bg-white shadow-md flex items-center gap-4">
+      <div className="lg:hidden fixed top-0 left-0 w-full z-50 p-4 dark:bg-gray-900 shadow-md flex items-center gap-4">
         <Menu
           size={24}
           onClick={() => setIsOpen(true)}
@@ -53,7 +65,7 @@ const Sidebar = () => {
             <p className="text-sm font-semibold dark:text-black">Taskify Pro</p>
             <Button className="mt-2 w-full dark:bg-white">Get Pro</Button>
           </div>
-          <SidebarLink icon={<LogOut size={20} />} label="Sign Out" />
+          <SidebarLink icon={<LogOut size={20} />} label="Sign Out" onClick={handleLogout}/>
         </div>
       </aside>
     </>
@@ -63,11 +75,15 @@ const Sidebar = () => {
 const SidebarLink = ({
   icon,
   label,
+  onClick,
+  
 }: {
   icon: React.ReactNode;
   label: string;
+  onClick?: () => void;
+ 
 }) => (
-  <div className="flex items-center gap-3 px-2 py-2 rounded-md hover:bg-gray-100 cursor-pointer">
+  <div onClick={onClick} className="flex items-center gap-3 px-2 py-2 rounded-md hover:bg-gray-100 cursor-pointer">
     {icon}
     <span>{label}</span>
   </div>
