@@ -1,8 +1,8 @@
-import React from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import TaskCard from "@/components/TaskCard";
 import ProgressChart from "@/components/ProgressChart";
+import { CirclePlus } from 'lucide-react';
 
 const Home = () => {
    const dailyTasks = [
@@ -27,6 +27,7 @@ const Home = () => {
             <TaskCard title="Weekly Task" tasks={weeklyTasks} />
             <ProgressChart />
           </div>
+           <CirclePlus />
         </main>
       </div>
     </div>
