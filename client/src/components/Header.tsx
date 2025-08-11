@@ -1,18 +1,16 @@
 import { Bell, Sun,Moon } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useState,useEffect } from "react";
+import {useContext } from "react";
+import { ThemeContext } from "@/context/ThemeContext";
  
 
 const Header = () => {
- const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [darkMode]);
+const themeContext = useContext(ThemeContext);
+ if (!themeContext) {
+    throw new Error("Header must be used within a ThemeProvider");
+  }
+ const { theme, toggleTheme } = themeContext;
+   
   return (
     <header className="flex items-center justify-between p-4 bg-white dark:bg-gray-900 shadow-sm">
       <Input type="text" placeholder="Search..." className="max-w-sm" />
@@ -20,15 +18,15 @@ const Header = () => {
         
         <Bell className="text-gray-600 dark:text-gray-300 " />
           
-       {darkMode ? (
+       {theme === "dark" ?(
           <Sun
             className="cursor-pointer text-yellow-400"
-            onClick={() => setDarkMode(false)}
+              onClick={toggleTheme}
           />
         ) : (
           <Moon
             className="cursor-pointer text-gray-600 dark:text-gray-300"
-            onClick={() => setDarkMode(true)}
+               onClick={toggleTheme}
           />
         )}
       </div>
