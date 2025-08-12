@@ -2,12 +2,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import login from "@/assets/login.png";
 import { Formik, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import { toast } from "sonner";
 import { LockKeyhole } from "lucide-react";
 import { LockKeyholeOpen } from "lucide-react";
 import  { useState } from "react";
 import {signupUser} from "../../api/auth"
+import { validationSchema } from "@/utils/validation";
 const Signup = () => {
    const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -19,27 +19,7 @@ const Signup = () => {
     setConfirmPassword((prev) => !prev);
   };
 
-  const validationSchema = Yup.object({
-    name: Yup.string()
-      .min(3, "Name must be at least 3 characters")
-      .required("Name is required"),
-
-    email: Yup.string()
-      .email("Invalid email format")
-      .required("Email is required"),
-
-    password: Yup.string()
-      .min(8, "Password must be at least 8 characters")
-      .matches(/[A-Z]/, "Must contain at least one uppercase letter")
-      .matches(/[a-z]/, "Must contain at least one lowercase letter")
-      .matches(/[0-9]/, "Must contain at least one number")
-      .matches(/[^A-Za-z0-9]/, "Must contain at least one special character")
-      .required("Password is required"),
-
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password")], "Passwords must match")
-      .required("Please confirm your password"),
-  });
+ 
 
   const handleSubmit = async (values: {
     name: string;
