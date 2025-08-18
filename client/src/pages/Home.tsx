@@ -2,7 +2,7 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import TaskCard from "@/components/TaskCard";
 import ProgressChart from "@/components/ProgressChart";
-import { CirclePlus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 const Home = () => {
    const dailyTasks = [
@@ -27,7 +27,9 @@ const Home = () => {
             <TaskCard title="Weekly Task" tasks={weeklyTasks} />
             <ProgressChart />
           </div>
-           <CirclePlus />
+           <div className="fixed bottom-8 right-10 bg-black text-white p-4 rounded-full shadow-lg hover:bg-black transition-colors cursor-pointer">
+     <Plus />
+    </div>
         </main>
       </div>
     </div>
