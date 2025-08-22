@@ -2,10 +2,10 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import TaskCard from "@/components/TaskCard";
 import ProgressChart from "@/components/ProgressChart";
-import { Plus } from 'lucide-react';
+import { Plus } from "lucide-react";
 
 const Home = () => {
-   const dailyTasks = [
+  const dailyTasks = [
     { id: 1, label: "Create a new post", checked: false },
     { id: 2, label: "Design an Instagram carousel", checked: true },
     { id: 3, label: "Create a new post", checked: false },
@@ -17,7 +17,7 @@ const Home = () => {
     { id: 3, label: "Create a new post", checked: false },
   ];
   return (
-     <div className="flex">
+    <div className="flex">
       <Sidebar />
       <div className="flex-1 bg-gray-50 dark:bg-black h-screen overflow-auto pt-[64px] lg:pt-0">
         <Header />
@@ -27,13 +27,12 @@ const Home = () => {
             <TaskCard title="Weekly Task" tasks={weeklyTasks} />
             <ProgressChart />
           </div>
-           <div className="fixed bottom-8 right-10 bg-black text-white p-4 rounded-full shadow-lg hover:bg-black transition-colors cursor-pointer">
-     <Plus />
-    </div>
+          <div className="fixed bottom-8 right-10 bg-black text-white p-4 rounded-full shadow-lg hover:bg-black transition-colors cursor-pointer">
+            <Plus />
+          </div>
         </main>
       </div>
     </div>
-
   );
 };
 
