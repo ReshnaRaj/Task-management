@@ -1,24 +1,146 @@
- 
-
-const Modal = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null;  
-
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useState } from "react";
+export default function TaskForm({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const [task, setTask] = useState({
+    title: "",
+    description: "",
+    priority: "Medium",
+    status: "Pending",
+    dueDate: "",
+    assignedTo: "",
+  });
+  const developers = ["Alice", "Bob", "Charlie", "David"];
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 w-[90%] max-w-md shadow-lg relative">
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Create New Task</DialogTitle>
+        </DialogHeader>
+        <form className="space-y-5 mt-4">
         
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
-        >
-          ✖
-        </button>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="title">Title</Label>
+            <Input
+              id="title"
+              value={task.title}
+              onChange={(e) => setTask({ ...task, title: e.target.value })}
+              placeholder="Enter task title"
+              required
+            />
+          </div>
 
-        {children}
-      </div>
-    </div>
+         
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              value={task.description}
+              onChange={(e) =>
+                setTask({ ...task, description: e.target.value })
+              }
+              placeholder="Enter task description"
+              required
+            />
+          </div>
+
+         
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex flex-col gap-2">
+              <Label>Priority</Label>
+              <Select
+                value={task.priority}
+                onValueChange={(value) => setTask({ ...task, priority: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select priority" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Low">Low</SelectItem>
+                  <SelectItem value="Medium">Medium</SelectItem>
+                  <SelectItem value="High">High</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label>Status</Label>
+              <Select
+                value={task.status}
+                onValueChange={(value) => setTask({ ...task, status: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Pending">Pending</SelectItem>
+                  <SelectItem value="In Progress">In Progress</SelectItem>
+                  <SelectItem value="Done">Done</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="dueDate">Due Date</Label>
+              <Input
+                id="dueDate"
+                type="date"
+                value={task.dueDate}
+                onChange={(e) => setTask({ ...task, dueDate: e.target.value })}
+                required
+              />
+            </div>
+          </div>
+
+          
+          <div className="flex flex-col gap-2">
+            <Label>Assign To</Label>
+            <Select
+              value={task.assignedTo}
+              onValueChange={(value) => setTask({ ...task, assignedTo: value })}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select developer" />
+              </SelectTrigger>
+              <SelectContent>
+                {developers.map((dev) => (
+                  <SelectItem key={dev} value={dev}>
+                    {dev}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          
+          <div className="flex justify-end">
+            <Button type="submit" className="cursor-pointer">
+              Create
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
-};
-
-export default Modal
+}

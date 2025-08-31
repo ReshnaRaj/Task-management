@@ -40,7 +40,7 @@ const Login = () => {
 
     try {
       const res = await loginUser(values);
-      
+      console.log(res,"response from the login")
       toast.success(res.data.message);
       if (res?.status === 200) {
         dispatch(setCredentials({ user: res.data.user, token: res.data.accessToken }));

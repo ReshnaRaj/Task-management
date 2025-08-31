@@ -5,11 +5,11 @@ import { Formik, ErrorMessage } from "formik";
 import { toast } from "sonner";
 import { LockKeyhole } from "lucide-react";
 import { LockKeyholeOpen } from "lucide-react";
-import  { useState } from "react";
-import {signupUser} from "../../api/auth"
+import { useState } from "react";
+import { signupUser } from "../../api/auth";
 import { validationSchema } from "@/utils/validation";
 const Signup = () => {
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(false);
   const togglePassword = () => {
@@ -19,8 +19,6 @@ const Signup = () => {
     setConfirmPassword((prev) => !prev);
   };
 
- 
-
   const handleSubmit = async (values: {
     name: string;
     email: string;
@@ -28,17 +26,16 @@ const Signup = () => {
     confirmPassword: string;
   }) => {
     try {
-      const res = await signupUser(values)
-     
-       if (res?.status === 200) {
-      toast.success("Registration successful!");
-     setTimeout(()=>{
-      navigate('/login')
-     },1000)
-    }
-     
-    } catch (error:any) {
-       toast.error(error.response.data.error || "Signup failed");
+      const res = await signupUser(values);
+
+      if (res?.status === 200) {
+        toast.success("Registration successful!");
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+    } catch (error: any) {
+      toast.error(error.response.data.error || "Signup failed");
     }
   };
   return (

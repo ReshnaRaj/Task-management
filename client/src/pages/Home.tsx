@@ -3,8 +3,14 @@ import Sidebar from "../components/Sidebar";
 import TaskCard from "@/components/TaskCard";
 import ProgressChart from "@/components/ProgressChart";
 import { Plus } from "lucide-react";
-
+import { useState } from "react";
+import TaskForm from "@/components/TaskForm";
+import { useSelector } from "react-redux";
 const Home = () => {
+  const [open, setOpen] = useState(false);
+  const userData = useSelector((state: any) => state.auth);
+  console.log(userData, "userData from the home page");
+  const role = userData?.user?.role;
   const dailyTasks = [
     { id: 1, label: "Create a new post", checked: false },
     { id: 2, label: "Design an Instagram carousel", checked: true },
@@ -27,9 +33,15 @@ const Home = () => {
             <TaskCard title="Weekly Task" tasks={weeklyTasks} />
             <ProgressChart />
           </div>
-          <div className="fixed bottom-8 right-10 bg-black text-white p-4 rounded-full shadow-lg hover:bg-black transition-colors cursor-pointer">
-            <Plus />
-          </div>
+          {role === "admin" && (
+            <div
+              className="fixed bottom-8 right-10 bg-black text-white p-4 rounded-full shadow-lg hover:bg-gray-800 transition-colors cursor-pointer"
+              onClick={() => setOpen(true)}
+            >
+              <Plus />
+            </div>
+          )}
+          <TaskForm open={open} onOpenChange={setOpen} />
         </main>
       </div>
     </div>

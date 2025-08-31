@@ -50,6 +50,7 @@ export class UserService implements IUserService {
         id: existingUser._id.toString(),
         name: existingUser.name,
         email: existingUser.email,
+        role:existingUser?existingUser.role:"user"
       },
       };
     }
@@ -68,6 +69,7 @@ export class UserService implements IUserService {
       id: newUser._id.toString(),
       name: newUser.name,
       email: newUser.email,
+      role:newUser.role?newUser.role:"user"
     },
     };
   }
@@ -100,6 +102,7 @@ export class UserService implements IUserService {
         id: user ? user._id.toString() : "null",
         name: user ? user.name : "null",
         email: user ? user.email : "null",
+        role:user?user.role:"user"
       },
     };
   }
