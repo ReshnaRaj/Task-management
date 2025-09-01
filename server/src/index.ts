@@ -5,6 +5,7 @@ import validateEnv from './utils/env';
 import { env } from "./config/env.config";
 import dbConnection from "./config/db.connection"
 import authRoute from "./routes/auth.router"
+import taskRoute from "./routes/task.router"
 dbConnection()
 validateEnv();
 const app=express()
@@ -16,8 +17,7 @@ app.use(cors({
     credentials:true
 }))
 app.use('/api/auth',authRoute);
-
-console.log(env.BASE_URL,"base urls")
+app.use('/api/task',taskRoute)
 app.use(errorHandler)
 app.listen(PORT, () => {
     console.log(`Server running in port ${PORT}`);

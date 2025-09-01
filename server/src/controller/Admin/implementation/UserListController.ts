@@ -3,6 +3,7 @@ import { IUserListController } from "../interface/IUserListController";
 export class UserListController implements IUserListController{
     async getAllUsers(req:Request,res:Response,next:NextFunction):Promise<void>{
         try {
+//  need to return the list of users 
             res.status(200).json({message:"get all users"});
         }
         catch (error) {

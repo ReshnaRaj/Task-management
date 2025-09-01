@@ -40,8 +40,8 @@ export class UserService implements IUserService {
     const existingUser = await this._userRepository.findOne({ email }); // `sub` is the Google user ID (used as password fallback)
     if (existingUser) {
       // const token = generateAccessToken(existingUser?.id.toString());
-       const accessToken = generateAccessToken((existingUser?._id || "").toString());
-  const refreshToken = generateRefreshToken((existingUser?._id || "").toString());
+       const accessToken = generateAccessToken((existingUser?._id || "").toString(),existingUser.role);
+  const refreshToken = generateRefreshToken((existingUser?._id || "").toString(),existingUser.role);
       return {
         message: "Login successful",
         accessToken,
@@ -59,8 +59,8 @@ export class UserService implements IUserService {
       email,
     });
     // const token = generateAccessToken(newUser._id.toString());
-     const newAccessToken  = generateAccessToken((newUser?._id || "").toString());
-  const newRefreshToken = generateRefreshToken((newUser?._id || "").toString());
+     const newAccessToken  = generateAccessToken((newUser?._id || "").toString(),newUser.role);
+  const newRefreshToken = generateRefreshToken((newUser?._id || "").toString(),newUser.role);
     return {
       message: "User registered with Google",
       accessToken: newAccessToken,
@@ -76,8 +76,6 @@ export class UserService implements IUserService {
 
   async login(email: string, password: string): Promise<LoginDTO> {
     const user = await this._userRepository.findOne({ email });
-   
-    console.log("login service implementation")
     if (!user) {
       throw createHttpError(HttpStatus.BAD_REQUEST, Messages.USER_NOT_FOUND);
     }
@@ -92,8 +90,8 @@ export class UserService implements IUserService {
         Messages.INVALID_CREDENTIALS
       );
     }
-    const accessToken = generateAccessToken(user?.id.toString());
-    const refreshToken = generateRefreshToken(user?.id.toString());
+    const accessToken = generateAccessToken(user?.id.toString(),user.role);
+    const refreshToken = generateRefreshToken(user?.id.toString(),user.role);
     return {
       message: Messages.LOGIN_SUCCESS,
       accessToken,

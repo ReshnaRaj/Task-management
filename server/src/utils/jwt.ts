@@ -3,11 +3,11 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET!;
  
 
-export function generateAccessToken(userId:string){
-    return jwt.sign({id:userId},JWT_SECRET,{expiresIn: '1h'})
+export function generateAccessToken(userId:string,role?:string){
+    return jwt.sign({id:userId,role},JWT_SECRET,{expiresIn: '1h'})
 }
-export function generateRefreshToken(userId: string) {
-    return jwt.sign({id: userId}, JWT_REFRESH_SECRET, {expiresIn: '7d'})
+export function generateRefreshToken(userId: string,role?:string) {
+    return jwt.sign({id: userId,role}, JWT_REFRESH_SECRET, {expiresIn: '7d'})
 };
 export function verifyToken(token: string) {
     try {

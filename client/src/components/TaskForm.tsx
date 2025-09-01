@@ -15,7 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+ import {getUsers} from "../../api/task"
 export default function TaskForm({
   open,
   onOpenChange,
@@ -31,6 +32,14 @@ export default function TaskForm({
     dueDate: "",
     assignedTo: "",
   });
+const fetchUsers=async()=>{
+   const res=await getUsers()
+   console.log(res,"user data")
+}
+useEffect(()=>{
+  fetchUsers()
+},[])
+
   const developers = ["Alice", "Bob", "Charlie", "David"];
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

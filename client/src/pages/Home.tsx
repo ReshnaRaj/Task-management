@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 const Home = () => {
   const [open, setOpen] = useState(false);
   const userData = useSelector((state: any) => state.auth);
-  console.log(userData, "userData from the home page");
+   
   const role = userData?.user?.role;
   const dailyTasks = [
     { id: 1, label: "Create a new post", checked: false },
