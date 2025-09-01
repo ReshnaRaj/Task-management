@@ -1,16 +1,18 @@
 import { TaskModel } from "../../../models/task.model";
-import { UserModel } from "../../../models/user.model";
+import { IUser, UserModel } from "../../../models/user.model";
 import { IUserListService } from "../interface/IUserListService";
+import { IBaseRepository } from "../../../repositories/Base/interface/IBaseRepository";
 
-export class UserListService implements IUserListService{
-      async getAllUsers(): Promise<{ id: string; name: string; email: string }[]> {
-    const users = await UserModel.find({ role: "user" }).select("_id name email");
+export class UserListService implements IUserListService {
+  constructor(private _userListRepository: IBaseRepository<IUser>) {}
+  async getAllUsers(): Promise<{ id: string; name: string; email: string }[]> {
+    const users = await this._userListRepository.find({ role: "user" })
     return users.map((user) => ({
       id: user._id.toString(),
       name: user.name,
       email: user.email,
     }));
-  }  
+  }
   async createTaskForUser(
     userId: string,
     title: string,
@@ -19,7 +21,9 @@ export class UserListService implements IUserListService{
     const user = await UserModel.findById(userId);
 
     if (!user || user.role !== "user") {
-      throw new Error("Invalid user. Task can only be assigned to a developer.");
+      throw new Error(
+        "Invalid user. Task can only be assigned to a developer."
+      );
     }
 
     await TaskModel.create({
@@ -34,6 +38,4 @@ export class UserListService implements IUserListService{
 
     return { message: `Task assigned to ${user.name}` };
   }
-    
-
 }

@@ -18,20 +18,20 @@ export const authAdmin = (
 ) => {
  
   const authHeader = req.headers.authorization;
-  console.log(authHeader,"auth headers")
+  
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return next(
       createHttpError(HttpStatus.UNAUTHORIZED, Messages.NOT_AUTHORIZED)
     );
   }
   const token = authHeader.split(" ")[1];
-  console.log(token,"tokensss")
+  
   try {
     const decoded = jwt.verify(token, env.JWT_SECRET as string) as {
       id: string;
       role: "admin" | "user";
     };
-    console.log(decoded,"decodeddd")
+    
     
     if (decoded.role !== "admin") {
       return next(createHttpError(HttpStatus.FORBIDDEN, "Admin access only"));
