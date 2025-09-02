@@ -16,7 +16,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
- import {getUsers} from "../../api/task"
+import { createTask, getUsers } from "../../api/task";
+import { toast } from "sonner";
 export default function TaskForm({
   open,
   onOpenChange,
@@ -24,6 +25,12 @@ export default function TaskForm({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  interface Developer {
+    id: string;
+    name: string;
+    email?: string;
+  }
+
   const [task, setTask] = useState({
     title: "",
     description: "",
@@ -32,23 +39,34 @@ export default function TaskForm({
     dueDate: "",
     assignedTo: "",
   });
-const fetchUsers=async()=>{
-   const res=await getUsers()
-   console.log(res,"user data")
-}
-useEffect(()=>{
-  fetchUsers()
-},[])
+  const [developers, setDevelopers] = useState<Developer[]>([]);
 
-  const developers = ["Alice", "Bob", "Charlie", "David"];
+  const fetchUsers = async () => {
+    const res = await getUsers();
+
+    setDevelopers(res?.data.response);
+  };
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+  const handleSubmit =async (e:React.FormEvent) => {
+    e.preventDefault();
+    try {
+      
+      const res=await createTask(task)
+      toast.success(res.data.message)
+    } catch (error) {
+      console.log(error,"errors data")
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>Create New Task</DialogTitle>
         </DialogHeader>
-        <form className="space-y-5 mt-4">
-        
+        <form  onSubmit={handleSubmit} className="space-y-5 mt-4">
           <div className="flex flex-col gap-2">
             <Label htmlFor="title">Title</Label>
             <Input
@@ -60,7 +78,6 @@ useEffect(()=>{
             />
           </div>
 
-         
           <div className="flex flex-col gap-2">
             <Label htmlFor="description">Description</Label>
             <Textarea
@@ -74,7 +91,6 @@ useEffect(()=>{
             />
           </div>
 
-         
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex flex-col gap-2">
               <Label>Priority</Label>
@@ -122,7 +138,6 @@ useEffect(()=>{
             </div>
           </div>
 
-          
           <div className="flex flex-col gap-2">
             <Label>Assign To</Label>
             <Select
@@ -134,15 +149,14 @@ useEffect(()=>{
               </SelectTrigger>
               <SelectContent>
                 {developers.map((dev) => (
-                  <SelectItem key={dev} value={dev}>
-                    {dev}
+                  <SelectItem key={dev.id} value={dev.id}>
+                    {dev.name}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
 
-          
           <div className="flex justify-end">
             <Button type="submit" className="cursor-pointer">
               Create

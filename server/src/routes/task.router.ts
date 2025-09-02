@@ -16,6 +16,8 @@ router.get(
     authAdmin,
     userListController.getAllUsers.bind(userListController)
 );
-router.post("/create-task", authAdmin, userListController.createTaskForUser);
+// router.post("/create-task", authAdmin, userListController.createTaskForUser);
+router.post("/create-task", authAdmin, userListController.createTaskForUser.bind(userListController));
+
 
 export default router;

@@ -12,7 +12,7 @@ export class UserListController implements IUserListController {
     try {
       //  need to return the list of users
       const response = await this._userList.getAllUsers();
-      console.log(response, "response");
+       
       res.status(HttpStatus.OK).json({ message: "get all users", response });
     } catch (error) {
       next(error);
@@ -24,6 +24,7 @@ export class UserListController implements IUserListController {
     next: NextFunction
   ): Promise<void> {
     try {
+      const response=await this.
       res.status(200).json({ message: "create task for user" });
     } catch (error) {
       next(error);

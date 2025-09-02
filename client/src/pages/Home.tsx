@@ -41,7 +41,7 @@ const Home = () => {
               <Plus />
             </div>
           )}
-          <TaskForm open={open} onOpenChange={setOpen} />
+         {open && <TaskForm open={open} onOpenChange={setOpen} />}
         </main>
       </div>
     </div>

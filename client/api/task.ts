@@ -1,7 +1,7 @@
 import {privateAxios} from "./axiosInstance"
 export const getUsers=async()=>{
     try {
-        console.log("inside get userss function ")
+        
         const res=await privateAxios.get("/task/get-users")
         // console.log(res,"response of get users....")
         return res;
@@ -10,7 +10,7 @@ export const getUsers=async()=>{
     }
 }
 export const createTask = async (taskData: {
-  userId: string;
+  assignedTo: string;
   title: string;
   description: string;
   priority?: string;
@@ -19,6 +19,7 @@ export const createTask = async (taskData: {
 }) => {
   try {
     const res = await privateAxios.post("/task/create-task", taskData);
+    console.log(res,"response from backend")
     return res.data;
   } catch (error) {
     console.error("Error creating task:", error);
