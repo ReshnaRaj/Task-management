@@ -6,9 +6,11 @@ import { authAdmin } from "../middleware/authMiddleware";
 import { IUser, UserModel } from "../models/user.model";
 import { BaseRepository } from "../repositories/Base/implementation/base.repository";
 import { UserListService } from "../services/Admin/implementation/userListService";
+import { ITask, TaskModel } from "../models/task.model";
 
 const userListRepository = new BaseRepository<IUser>(UserModel);
-const userListService = new UserListService(userListRepository);
+const taskRepository = new BaseRepository<ITask>(TaskModel);
+const userListService = new UserListService(userListRepository, taskRepository);
 const userListController = new UserListController(userListService);
 
 router.get(

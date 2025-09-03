@@ -4,7 +4,10 @@ import { IUserListService } from "../interface/IUserListService";
 import { IBaseRepository } from "../../../repositories/Base/interface/IBaseRepository";
 
 export class UserListService implements IUserListService {
-  constructor(private _userListRepository: IBaseRepository<IUser>) { }
+  constructor(
+    private _userListRepository: IBaseRepository<IUser>,
+    private _taskRepository: IBaseRepository<ITask>
+  ) { }
   async getAllUsers(): Promise<{ id: string; name: string; email: string }[]> {
     const users = await this._userListRepository.find({ role: "user" })
     return users.map((user) => ({
@@ -30,24 +33,22 @@ export class UserListService implements IUserListService {
       }
     }
 
-
-    const task = await TaskModel.create({
+    const task = await this._taskRepository.create({
       title,
       description,
       priority,
       status,
-      dueDate: new Date(dueDate),
-      assignedTo: user ? user._id : null,
-
-    });
+      dueDate: new Date(dueDate) as unknown as any,
+      assignedTo: user ? (user._id as unknown as any) : null,
+    } as Partial<ITask>);
     return { message: `Task Created`, task };
   }
   async getTaskList():Promise<ITask[]>{
-    const tasks=await TaskModel.find({})
+    const tasks = await this._taskRepository.find({});
     return tasks;
   }
   async getTask(id: string): Promise<ITask | null> {
-    const task = await TaskModel.findById(id);
+    const task = await this._taskRepository.findById(id);
     return task;
   }
 }
