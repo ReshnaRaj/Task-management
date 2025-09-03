@@ -1,21 +1,34 @@
-import Login from '@/components/Login';
-import Home from '@/pages/Home';
-import Signup from '@/pages/Signup';
+import Login from "@/components/Login";
+import Home from "@/pages/Home";
+import Signup from "@/pages/Signup";
 import ProtectedRoute from "./ProtectedRoute";
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import type { RootState } from "../redux/store";
 
 const AuthRoute = () => {
-  return (
-   <Routes>
-    <Route path="/" element={<Login/>}></Route>
-    <Route path='/register' element={<Signup/>}/>
-    {/* <Route path="/login" element={<Login/>}/> */}
-     <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard" element={<Home/>} />
-        
-      </Route>
-   </Routes>
-  )
-}
+  const token = useSelector((state: RootState) => state.auth.token);
 
-export default AuthRoute
+  return (
+    <Routes>
+      <Route 
+        path="/" 
+        element={
+          token ? <Navigate to="/dashboard" replace /> : <Login />
+        }
+      />
+      <Route path="/register" element={<Signup />} />
+      
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
+  );
+};
+
+export default AuthRoute;
