@@ -1,11 +1,11 @@
 import { Router } from "express";
 const router = Router();
-import { UserListController } from "../controller/Admin/implementation/UserListController";
-import { authAdmin } from "../middleware/authMiddleware";
+import { UserListController } from "../controller/Admin/implementation/userlist.controller";
+import { authAdmin } from "../middleware/auth.middleware";
 // import {TaskModel,ITask} from "../models/task.model"
 import { IUser, UserModel } from "../models/user.model";
 import { BaseRepository } from "../repositories/Base/implementation/base.repository";
-import { UserListService } from "../services/Admin/implementation/userListService";
+import { UserListService } from "../services/Admin/implementation/userlist.service";
 import { ITask, TaskModel } from "../models/task.model";
 
 const userListRepository = new BaseRepository<IUser>(UserModel);

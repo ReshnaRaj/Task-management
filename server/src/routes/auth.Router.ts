@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { validateRegister } from "../middleware/validation";
-import { UserAuthController } from "../controller/user/implementation/AuthController";
-import { UserService } from "../services/user/implementation/UserService";
+import { UserAuthController } from "../controller/user/implementation/auth.controller";
+import { UserService } from "../services/user/implementation/user.service";
 import { BaseRepository } from "../repositories/Base/implementation/base.repository";
 import { UserModel, IUser } from "../models/user.model";
 const router = Router()
