@@ -1,5 +1,6 @@
 import { store } from "@/redux/store";
 import axios from "axios"
+import { setCredentials, logout } from "@/redux/slice/authSlice";
 const API_URL=import.meta.env.VITE_API_BASE_URL!
  
 export const publicAxios = axios.create({
@@ -42,19 +43,21 @@ privateAxios.interceptors.response.use(
         const refreshToken = localStorage.getItem("refreshToken");
 
         // Request new access token
-        const res = await axios.post('/generate-new-token', {
+        const res = await axios.post(`${API_URL}/auth/generate-new-token`, {
           refreshToken,
-        });
+        }, { withCredentials: true });
 
         const newAccessToken = res.data.accessToken;
-        localStorage.setItem("accessToken", newAccessToken);
+        // persist token in redux
+        const state = store.getState();
+        store.dispatch(setCredentials({ user: state.auth.user, token: newAccessToken }));
 
         // Retry the original request with new token
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return privateAxios(originalRequest);
       } catch (err) {
         console.error("Refresh token failed", err);
-        // logout user
+        store.dispatch(logout());
       }
     }
 

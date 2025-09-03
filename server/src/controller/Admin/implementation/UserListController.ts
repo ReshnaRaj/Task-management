@@ -47,4 +47,17 @@ export class UserListController implements IUserListController {
       }
 
   }
+  async getTask(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { id } = req.params;
+      const task = await this._userList.getTask(id);
+      if (!task) {
+        res.status(HttpStatus.NOT_FOUND).json({ message: "Task not found" });
+        return;
+      }
+      res.status(HttpStatus.OK).json({ message: "Retrieve Task", task });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

@@ -46,4 +46,8 @@ export class UserListService implements IUserListService {
     const tasks=await TaskModel.find({})
     return tasks;
   }
+  async getTask(id: string): Promise<ITask | null> {
+    const task = await TaskModel.findById(id);
+    return task;
+  }
 }

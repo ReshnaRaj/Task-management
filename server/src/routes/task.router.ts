@@ -22,6 +22,7 @@ router.post(
   userListController.createTaskForUser.bind(userListController)
 );
 router.get("/get-taskList",authAdmin,userListController.getTaskList.bind(userListController))
+router.get("/get-task/:id", authAdmin, userListController.getTask.bind(userListController))
  
 
 export default router;

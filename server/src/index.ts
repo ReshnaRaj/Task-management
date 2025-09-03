@@ -6,11 +6,13 @@ import { env } from "./config/env.config";
 import dbConnection from "./config/db.connection"
 import authRoute from "./routes/auth.router"
 import taskRoute from "./routes/task.router"
+import cookieParser from "cookie-parser"
 dbConnection()
 validateEnv();
 const app=express()
 const PORT=env.PORT;
 app.use(express.json());
+app.use(cookieParser())
 app.use(cors({
     origin:[env.BASE_URL as string],
     methods:['POST','GET','PUT','DELETE'],

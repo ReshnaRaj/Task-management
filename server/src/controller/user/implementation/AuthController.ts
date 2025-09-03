@@ -68,7 +68,7 @@ export class UserAuthController implements IUserAuthController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const refreshToken = req.cookies.refreshToken;
+      const refreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
       const accessToken = await this._userService.generateRefreshToken(
         refreshToken
       );
