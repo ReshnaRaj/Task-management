@@ -49,14 +49,20 @@ export default function TaskForm({
   useEffect(() => {
     fetchUsers();
   }, []);
-  const handleSubmit =async (e:React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      
-      const res=await createTask(task)
-      toast.success(res.data.message)
+      const res = await createTask(task);
+       
+      if (res.status == 200) {
+        toast.success(res.data.message);
+        onOpenChange(false);
+      } else {
+        toast.error("Something went wrong");
+        onOpenChange(false);
+      }
     } catch (error) {
-      console.log(error,"errors data")
+      console.log(error, "errors data");
     }
   };
 
@@ -66,7 +72,7 @@ export default function TaskForm({
         <DialogHeader>
           <DialogTitle>Create New Task</DialogTitle>
         </DialogHeader>
-        <form  onSubmit={handleSubmit} className="space-y-5 mt-4">
+        <form onSubmit={handleSubmit} className="space-y-5 mt-4">
           <div className="flex flex-col gap-2">
             <Label htmlFor="title">Title</Label>
             <Input
@@ -102,9 +108,9 @@ export default function TaskForm({
                   <SelectValue placeholder="Select priority" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Low">Low</SelectItem>
-                  <SelectItem value="Medium">Medium</SelectItem>
-                  <SelectItem value="High">High</SelectItem>
+                  <SelectItem value="low">Low</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="high">High</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -119,9 +125,9 @@ export default function TaskForm({
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Pending">Pending</SelectItem>
-                  <SelectItem value="In Progress">In Progress</SelectItem>
-                  <SelectItem value="Done">Done</SelectItem>
+                  <SelectItem value="completed">Pending</SelectItem>
+                  <SelectItem value="open">In Progress</SelectItem>
+                  <SelectItem value="in-progress">Done</SelectItem>
                 </SelectContent>
               </Select>
             </div>

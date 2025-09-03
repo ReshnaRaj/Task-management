@@ -1,10 +1,10 @@
-import { TaskModel } from "../../../models/task.model";
+import { ITask,TaskModel } from "../../../models/task.model";
 import { IUser, UserModel } from "../../../models/user.model";
 import { IUserListService } from "../interface/IUserListService";
 import { IBaseRepository } from "../../../repositories/Base/interface/IBaseRepository";
 
 export class UserListService implements IUserListService {
-  constructor(private _userListRepository: IBaseRepository<IUser>) {}
+  constructor(private _userListRepository: IBaseRepository<IUser>) { }
   async getAllUsers(): Promise<{ id: string; name: string; email: string }[]> {
     const users = await this._userListRepository.find({ role: "user" })
     return users.map((user) => ({
@@ -14,28 +14,36 @@ export class UserListService implements IUserListService {
     }));
   }
   async createTaskForUser(
-    userId: string,
     title: string,
-    description: string
-  ): Promise<{ message: string }> {
-    const user = await UserModel.findById(userId);
-
-    if (!user || user.role !== "user") {
-      throw new Error(
-        "Invalid user. Task can only be assigned to a developer."
-      );
+    description: string,
+    priority: string,
+    status: string,
+    dueDate: string,
+    assignedTo?: string
+  ): Promise<{ message: string, task: any }> {
+     
+    let user = null;
+    if (assignedTo && assignedTo.trim() !== "") {
+      user = await this._userListRepository.findById(assignedTo);
+      if (!user || user.role !== "user") {
+        throw new Error("Invalid user. Task can only be assigned to a developer.");
+      }
     }
 
-    await TaskModel.create({
+
+    const task = await TaskModel.create({
       title,
       description,
-      priority: "medium", // default, can be extended
-      status: "open",
-      dueDate: new Date(), // set default, or accept from input
-      assignedTo: user._id,
-      createdBy: user._id, // Or adminId (if available in session)
-    });
+      priority,
+      status,
+      dueDate: new Date(dueDate),
+      assignedTo: user ? user._id : null,
 
-    return { message: `Task assigned to ${user.name}` };
+    });
+    return { message: `Task Created`, task };
+  }
+  async getTaskList():Promise<ITask[]>{
+    const tasks=await TaskModel.find({})
+    return tasks;
   }
 }

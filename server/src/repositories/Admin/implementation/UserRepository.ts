@@ -1,11 +1,11 @@
 import { IUserRepository } from "../interface/IUserRepository";
 import { IUser,UserModel } from "../../../models/user.model";
-import { TaskModel } from "../../../models/task.model";
+import { ITask,TaskModel } from "../../../models/task.model";
  
 
 export class UserRepositoryImpl implements IUserRepository {
   async findAll(): Promise<IUser[]> {
-    return await UserModel.find({ role: "user" }); // only developers
+    return await UserModel.find({ role: "user" }); 
   }
 
   async findById(id: string): Promise<IUser | null> {

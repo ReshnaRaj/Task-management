@@ -3,13 +3,14 @@ import Sidebar from "../components/Sidebar";
 import TaskCard from "@/components/TaskCard";
 import ProgressChart from "@/components/ProgressChart";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TaskForm from "@/components/TaskForm";
 import { useSelector } from "react-redux";
+import { getTaskList } from "../../api/task";
 const Home = () => {
   const [open, setOpen] = useState(false);
   const userData = useSelector((state: any) => state.auth);
-   
+
   const role = userData?.user?.role;
   const dailyTasks = [
     { id: 1, label: "Create a new post", checked: false },
@@ -22,6 +23,13 @@ const Home = () => {
     { id: 2, label: "Design an Instagram carousel", checked: true },
     { id: 3, label: "Create a new post", checked: false },
   ];
+  const fetchTasks = async () => {
+    const response = await getTaskList();
+    console.log(response, "responsee");
+  };
+  useEffect(() => {
+    fetchTasks();
+  }, []);
   return (
     <div className="flex">
       <Sidebar />
@@ -41,7 +49,7 @@ const Home = () => {
               <Plus />
             </div>
           )}
-         {open && <TaskForm open={open} onOpenChange={setOpen} />}
+          {open && <TaskForm open={open} onOpenChange={setOpen} />}
         </main>
       </div>
     </div>
