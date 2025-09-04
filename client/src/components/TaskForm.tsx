@@ -125,9 +125,10 @@ export default function TaskForm({
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="completed">Pending</SelectItem>
-                  <SelectItem value="open">In Progress</SelectItem>
-                  <SelectItem value="in-progress">Done</SelectItem>
+                  <SelectItem value="todo">To Do</SelectItem>
+                  <SelectItem value="in-progress">In Progress</SelectItem>
+                  <SelectItem value="in-review">In Review</SelectItem>
+                   <SelectItem value="done">Done</SelectItem>
                 </SelectContent>
               </Select>
             </div>

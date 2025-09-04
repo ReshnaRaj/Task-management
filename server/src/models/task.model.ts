@@ -3,7 +3,7 @@ export interface ITask extends Document {
   title: string;
   description: string;
   priority: "low" | "medium" | "high";
-  status: "open" | "in-progress" | "completed";
+  status: "todo" | "in-progress" | "in-review" | "done";
   dueDate: Date;
   assignedTo:Types.ObjectId;
   createdBy: Types.ObjectId;
@@ -31,7 +31,7 @@ const taskSchema = new Schema<ITask>({
   },
   status: {
     type: String,
-    enum: ["completed", "open", "in-progress"],
+    enum: ["todo","in-review", "done", "in-progress"],
   },
   dueDate: {
     type: Date,
