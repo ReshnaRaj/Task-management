@@ -16,14 +16,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
-import { createTask, getUsers } from "../../api/task";
+import { createTask, getUsers, updateTask } from "../../api/task";
 import { toast } from "sonner";
 export default function TaskForm({
   open,
   onOpenChange,
+  editTask,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  editTask?: {
+    _id: string;
+    title: string;
+    description: string;
+    priority: "low" | "medium" | "high";
+    status: "todo" | "in-progress" | "in-review" | "done";
+    dueDate: string;
+    assignedTo?: string | { _id: string; name: string } | null;
+  } | null;
 }) {
   interface Developer {
     id: string;
@@ -34,8 +44,8 @@ export default function TaskForm({
   const [task, setTask] = useState({
     title: "",
     description: "",
-    priority: "Medium",
-    status: "Pending",
+    priority: "medium",
+    status: "todo",
     dueDate: "",
     assignedTo: "",
   });
@@ -49,12 +59,45 @@ export default function TaskForm({
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    if (editTask) {
+      setTask({
+        title: editTask.title || "",
+        description: editTask.description || "",
+        priority: (editTask.priority as any) || "medium",
+        status: (editTask.status as any) || "todo",
+        dueDate: editTask.dueDate ? new Date(editTask.dueDate).toISOString().slice(0, 10) : "",
+        assignedTo:
+          typeof editTask.assignedTo === "string"
+            ? editTask.assignedTo
+            : (editTask.assignedTo?._id as string) || "",
+      });
+    } else {
+      setTask({
+        title: "",
+        description: "",
+        priority: "medium",
+        status: "todo",
+        dueDate: "",
+        assignedTo: "",
+      });
+    }
+  }, [editTask]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await createTask(task);
-       
-      if (res.status == 200) {
+      let res;
+      if (editTask?._id) {
+        res = await updateTask({
+          id: editTask._id,
+          ...task,
+        });
+      } else {
+        res = await createTask(task as any);
+      }
+
+      if (res?.status == 200) {
         toast.success(res.data.message);
         onOpenChange(false);
       } else {
@@ -70,7 +113,7 @@ export default function TaskForm({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>Create New Task</DialogTitle>
+          <DialogTitle>{editTask ? "Edit Task" : "Create New Task"}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-5 mt-4">
           <div className="flex flex-col gap-2">
@@ -166,7 +209,7 @@ export default function TaskForm({
 
           <div className="flex justify-end">
             <Button type="submit" className="cursor-pointer">
-              Create
+              {editTask ? "Update" : "Create"}
             </Button>
           </div>
         </form>

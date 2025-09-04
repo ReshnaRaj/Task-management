@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import { UserListController } from "../controller/Admin/implementation/userlist.controller";
-import { authAdmin } from "../middleware/auth.middleware";
+import { authAdmin, authUser } from "../middleware/auth.middleware";
 // import {TaskModel,ITask} from "../models/task.model"
 import { IUser, UserModel } from "../models/user.model";
 import { BaseRepository } from "../repositories/Base/implementation/base.repository";
@@ -23,8 +23,15 @@ router.post(
   authAdmin,
   userListController.createTaskForUser.bind(userListController)
 );
+router.put(
+  "/update-task",
+  authAdmin,
+  userListController.updateTask.bind(userListController)
+)
 router.get("/get-taskList",authAdmin,userListController.getTaskList.bind(userListController))
 router.get("/get-task/:id", authAdmin, userListController.getTask.bind(userListController))
+router.get("/my-tasks", authUser, userListController.getTasksForUser.bind(userListController))
+router.put("/update-status", authUser, userListController.updateTaskStatus.bind(userListController))
  
 
 export default router;

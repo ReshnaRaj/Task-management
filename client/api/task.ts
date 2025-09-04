@@ -36,3 +36,40 @@ export const getTaskList = async () => {
 
   }
 }
+export const updateTask = async (taskData: {
+  id: string;
+  title?: string;
+  description?: string;
+  priority?: string;
+  status?: string;
+  dueDate?: string;
+  assignedTo?: string | null;
+}) => {
+  try {
+    const res = await privateAxios.put("/task/update-task", taskData);
+    return res;
+  } catch (error) {
+    console.error("Error updating task:", error);
+    throw error;
+  }
+}
+
+export const getMyTasks = async () => {
+  try {
+    const res = await privateAxios.get("/task/my-tasks");
+    return res;
+  } catch (error) {
+    console.error("Error fetching user tasks:", error);
+    throw error;
+  }
+}
+
+export const updateTaskStatus = async (taskId: string, status: string) => {
+  try {
+    const res = await privateAxios.put("/task/update-status", { taskId, status });
+    return res;
+  } catch (error) {
+    console.error("Error updating task status:", error);
+    throw error;
+  }
+}

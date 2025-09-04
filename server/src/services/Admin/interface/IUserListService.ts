@@ -13,4 +13,10 @@ export interface IUserListService {
     ): Promise<{ message: string; task: any }>;
     getTaskList():Promise<ITask[]>
     getTask(id: string): Promise<ITask | null>
+    updateTask(
+        id: string,
+        updates: Partial<Pick<ITask, "title"|"description"|"priority"|"status"|"dueDate">> & { assignedTo?: string | null }
+    ): Promise<{ message: string; task: ITask | null }>
+    getTasksForUser(userId: string): Promise<ITask[]>
+    updateTaskStatus(taskId: string, userId: string, status: "todo" | "in-progress" | "in-review" | "done"): Promise<{ message: string; task: ITask | null }>
 }

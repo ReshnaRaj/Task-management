@@ -1,5 +1,6 @@
 import Login from "@/components/Login";
 import Home from "@/pages/Home";
+import UserDashboard from "@/pages/UserDashboard";
 import Signup from "@/pages/Signup";
 import ProtectedRoute from "./ProtectedRoute";
 import { Route, Routes, Navigate } from "react-router-dom";
@@ -7,7 +8,15 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../redux/store";
 
 const AuthRoute = () => {
-  const token = useSelector((state: RootState) => state.auth.token);
+  const { token, user } = useSelector((state: RootState) => state.auth);
+
+  const DashboardComponent = () => {
+    if ((user as any)?.role === "admin") {
+      return <Home />;
+    } else {
+      return <UserDashboard />;
+    }
+  };
 
   return (
     <Routes>
@@ -23,7 +32,7 @@ const AuthRoute = () => {
         path="/dashboard"
         element={
           <ProtectedRoute>
-            <Home />
+            <DashboardComponent />
           </ProtectedRoute>
         }
       />
