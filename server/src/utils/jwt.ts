@@ -19,7 +19,7 @@ export function verifyToken(token: string) {
 };
 export function verifyRefreshToken(token: string) {
     try {
-        return jwt.verify(token, JWT_REFRESH_SECRET) as {id: string}
+        return jwt.verify(token, JWT_REFRESH_SECRET) as {id: string, role: string}
     } catch (error) {
         console.log(error)
         return null

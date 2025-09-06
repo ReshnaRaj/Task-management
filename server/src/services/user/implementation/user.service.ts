@@ -90,8 +90,8 @@ export class UserService implements IUserService {
         Messages.INVALID_CREDENTIALS
       );
     }
-    const accessToken = generateAccessToken(user?.id.toString(),user.role);
-    const refreshToken = generateRefreshToken(user?.id.toString(),user.role);
+    const accessToken = generateAccessToken(user?._id.toString(),user.role);
+    const refreshToken = generateRefreshToken(user?._id.toString(),user.role);
     return {
       message: Messages.LOGIN_SUCCESS,
       accessToken,
@@ -111,7 +111,13 @@ export class UserService implements IUserService {
       throw createHttpError(HttpStatus.UNAUTHORIZED, Messages.INVALID_TOKEN);
     }
 
-    const accessToken = generateAccessToken(decoded ? decoded.id : "null");
+    // Get user details to include role in the new token
+    const user = await this._userRepository.findById(decoded.id);
+    if (!user) {
+      throw createHttpError(HttpStatus.UNAUTHORIZED, Messages.INVALID_TOKEN);
+    }
+
+    const accessToken = generateAccessToken(decoded.id, user.role);
 
     return accessToken;
   }
