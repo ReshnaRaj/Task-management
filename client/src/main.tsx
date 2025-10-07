@@ -11,7 +11,11 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={googleClient}>
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
+        <PersistGate  loading={
+    <div className="flex items-center justify-center h-screen">
+      <p className="text-lg font-semibold">Please wait...</p>
+    </div>
+  } persistor={persistor}>
           <App />
         </PersistGate>
       </Provider>
