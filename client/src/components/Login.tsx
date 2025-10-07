@@ -44,8 +44,9 @@ const Login = () => {
       toast.success(res.data.message);
       if (res?.status === 200) {
         dispatch(setCredentials({ user: res.data.user, token: res.data.accessToken }));
-        // Navigate after state update to reduce flicker on slower devices
-        requestAnimationFrame(() => navigate("/dashboard"));
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1000);
       }
     } catch (error: any) {
       const errorMsg = error.response.data.error;
@@ -71,8 +72,7 @@ const Login = () => {
       
       if (res?.status == 200) {
           dispatch(setCredentials({ user: res.data.user, token: res.data.token }));
-        // Navigate on next frame so UI doesn't flash login
-        requestAnimationFrame(() => navigate("/dashboard"));
+        navigate("/dashboard");
       }
     } catch (error) {}
   };
