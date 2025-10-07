@@ -6,12 +6,15 @@ import App from "./App.tsx";
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react'
 import  { store,persistor } from './redux/store/index.ts';
+import { Spinner } from "./components/ui/spinner.tsx";
+
 const googleClient = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={googleClient}>
       <Provider store={store}>
-        <PersistGate  loading={<div>Loading...</div>} persistor={persistor}>
+        <PersistGate loading={<Spinner />} persistor={persistor}>
           <App />
         </PersistGate>
       </Provider>
