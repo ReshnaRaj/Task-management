@@ -40,12 +40,8 @@ privateAxios.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem("refreshToken");
-
-        // Request new access token
-        const res = await axios.post(`${API_URL}/auth/generate-new-token`, {
-          refreshToken,
-        }, { withCredentials: true });
+        // Request new access token using httpOnly cookie sent with credentials
+        const res = await axios.post(`${API_URL}/auth/generate-new-token`, {}, { withCredentials: true });
 
         const newAccessToken = res.data.accessToken;
         // persist token in redux

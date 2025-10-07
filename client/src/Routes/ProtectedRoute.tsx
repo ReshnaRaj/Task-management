@@ -8,7 +8,13 @@ interface ProtectedRouteProps {
 
 const ProtectedRoutes: React.FC<ProtectedRouteProps> = ({ children }) => {
   const {  token } = useSelector((state: RootState) => state.auth);
-  
+  // redux-persist injects _persist on root reducer; use any to avoid typing complexity here
+  const rehydrated = useSelector((state: any) => state._persist?.rehydrated);
+
+  // Wait for rehydration to finish to avoid false negative redirects on slow devices
+  if (!rehydrated) {
+    return null;
+  }
 
   if (!token) {
     return <Navigate to="/" replace />;
