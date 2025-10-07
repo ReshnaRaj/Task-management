@@ -22,7 +22,7 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoutes: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { user, token } = useSelector((state: RootState) => state.auth);
+  const {  token } = useSelector((state: RootState) => state.auth);
 
   if (!token) {
     return <Navigate to="/" replace />;

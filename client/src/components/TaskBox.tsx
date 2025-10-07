@@ -2,7 +2,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, User, Clock } from "lucide-react";
+import { Calendar, User } from "lucide-react";
 
 interface TaskBoxProps {
   id: string;
