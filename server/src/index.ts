@@ -18,6 +18,7 @@ app.use(cors({
     methods:['POST','GET','PUT','DELETE'],
     credentials:true
 }))
+console.log(env.BASE_URL,"base url")
 app.use('/api/auth',authRoute);
 app.use('/api/task',taskRoute)
 app.use(errorHandler)
