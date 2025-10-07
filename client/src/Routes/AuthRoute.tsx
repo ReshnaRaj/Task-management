@@ -9,7 +9,8 @@ import type { RootState } from "../redux/store";
 
 const AuthRoute = () => {
   const { token, user } = useSelector((state: RootState) => state.auth);
-
+  const rehydrated = useSelector((state: any) => state._persist?.rehydrated);
+console.log(rehydrated,"rehydrated")
   const DashboardComponent = () => {
     if ((user as any)?.role === "admin") {
       return <Home />;
@@ -23,7 +24,7 @@ const AuthRoute = () => {
       <Route 
         path="/" 
         element={
-          token ? <Navigate to="/dashboard" replace /> : <Login />
+          !rehydrated ? null : token ? <Navigate to="/dashboard" replace /> : <Login />
         }
       />
       <Route path="/register" element={<Signup />} />
