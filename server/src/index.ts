@@ -7,6 +7,7 @@ import dbConnection from "./config/db.connection"
 import authRoute from "./routes/auth.router"
 import taskRoute from "./routes/task.router"
 import cookieParser from "cookie-parser"
+import {swaggerDocs} from "./swagger/swagger.config"
 dbConnection()
 validateEnv();
 const app=express()
@@ -22,6 +23,7 @@ console.log(env.BASE_URL,"base url")
 app.use('/api/auth',authRoute);
 app.use('/api/task',taskRoute)
 app.use(errorHandler)
+swaggerDocs(app,Number(env.PORT))
 app.listen(PORT, () => {
     console.log(`Server running in port ${PORT}`);
 });

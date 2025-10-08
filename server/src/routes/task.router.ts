@@ -12,7 +12,25 @@ const userListRepository = new BaseRepository<IUser>(UserModel);
 const taskRepository = new BaseRepository<ITask>(TaskModel);
 const userListService = new UserListService(userListRepository, taskRepository);
 const userListController = new UserListController(userListService);
+/**
+ * @swagger
+ * tags:
+ *   name: Admin
+ *   description: Admin routes for user and task management
+ */
 
+/**
+ * @swagger
+ * /api/admin/get-users:
+ *   get:
+ *     summary: Get all users (Admin only)
+ *     tags: [Admin]
+ *     responses:
+ *       200:
+ *         description: List of users
+ *       401:
+ *         description: Unauthorized
+ */
 router.get(
   "/get-users",
   authAdmin,
